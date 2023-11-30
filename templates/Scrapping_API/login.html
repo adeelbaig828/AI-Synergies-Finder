@@ -1,0 +1,44 @@
+{% extends 'Scrapping_API/auth_base.html' %}
+{% load static %}
+
+{% block scripts %}
+<script src="{% static 'js/login.js'%}"></script>
+{% endblock scripts %}
+  
+{% block body %}
+<div class="container-fluid d-flex justify-content-center align-items-center" style="height: 90%;">
+  <div class="card text-white bg-primary rounded-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-center mb-4">
+        <img width='600' src="{% static 'images/falcon_logo.svg' %}" alt="Logo" class="img-fluid" >
+      </div>
+      <h3 class="text-center mb-4">Sign in to Your Account</h3>
+      <form method="POST" id="falcon_ai_login_form">
+        {% csrf_token %} 
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="d-grid">
+          <button type="button" id="falcon_ai_login_button" class="btn btn-secondary btn-lg">Sign In</button>
+        </div>
+      </form>
+      <div class="text-center mt-3 d-none" id="error_div">
+        <p style="color:#002b36;font-size:20px" id="error_p"></p>
+      </div>
+      <div class="text-center mt-4">
+        <a href="/forgot/" class="text-decoration-none text-white">Forgot your password?</a>
+      </div>
+      <div class="text-center mt-3">
+        <span class="text-white">Don't have an account?</span>
+        <a href="/signup/" class="text-decoration-none text-white fw-bold">Create one</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+  

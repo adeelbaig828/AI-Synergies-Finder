@@ -1,0 +1,57 @@
+{% extends 'Scrapping_API/auth_base.html' %}
+{% load static %}
+
+{% block scripts %}
+<script src="{% static 'js/forgotpassword.js'%}"></script>
+{% endblock scripts %}
+{% block body %}
+<div class="container-fluid d-flex justify-content-center align-items-center" style="height: 90%;">
+  <div class="card text-white bg-primary rounded-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-center mb-4">
+        <img width='600' src="{% static 'images/falcon_logo.svg' %}" alt="Logo" class="img-fluid" >
+      </div>
+      <h3 class="text-center mb-4">Forgot Your Password?</h3>
+
+      <form method="POST" id="falcon_ai_otp_request_form">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="email_or_username" class="form-label">Enter Your Email or Username</label>
+          <input type="text" class="form-control" id="email_or_username" name="email_or_username" required>
+          <div class="d-grid mt-3">
+            <button type="button" id="falcon_ai_otp_request_button" class="btn btn-secondary btn-lg">Send OTP</button>
+          </div>
+        </div>
+      </form>
+
+      
+
+      <form method="POST" class="d-none" id="falcon_ai_forgot_password_form">
+        {% csrf_token %}
+        <div class="mb-3" id="otp_box">
+          <label for="otp" class="form-label">Enter OTP</label>
+          <input type="text" class="form-control" id="otp" name="otp" required>
+        </div>
+        <div class="mb-3 " id="new_password_box">
+          <label for="new_password" class="form-label">New Password</label>
+          <input type="password" class="form-control" id="new_password" name="new_password" required>
+        </div>
+        <div class="mb-3" id="confirm_password_box">
+          <label for="confirm_password" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+          <div class="d-grid mt-3">
+            <button type="button" id="falcon_ai_forgot_password_button" class="btn btn-secondary btn-lg">Reset Password</button>
+          </div>
+        </div>
+      </form>
+      <div class="text-center mt-3 d-none" id="error_div">
+        <p style="color:#002b36;font-size:20px" id="error_p"></p>
+      </div>
+      <div class="text-center mt-3">
+        <a href="/" class="text-decoration-none text-white">Remembered your password? Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+  

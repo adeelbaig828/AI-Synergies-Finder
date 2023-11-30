@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scraping Page</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 80%;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .button-container {
+      text-align: center;
+    }
+
+    .button-container button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .button-container button:hover {
+      background-color: #45a049;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 10px;
+      margin-top: 20px;
+    }
+
+    .grid-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    .grid-item label {
+      font-weight: bold;
+    }
+
+    .grid-item span {
+      color: #666;
+    }
+
+    /* Loader styles */
+    .loader {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .loader img {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Scraping Page</h1>
+    <div class="form-group">
+      <label for="url-input">URL:</label>
+      <input type="text" id="url-input" placeholder="Enter URL">
+    </div>
+    <div class="button-container">
+      <button onclick="scrapData()">Scrap</button>
+    </div>
+    <div class="grid-container" id="grid-container"></div>
+  </div>
+  <div class="loader" id="loader">
+    Scrapping ......
+    {% comment %} <img src="loader.gif" alt="Loading..."> {% endcomment %}
+  </div>
+  <script>
+    function scrapData() {
+        var url = document.getElementById('url-input').value;
+        var container = document.getElementById('grid-container');
+        container.innerHTML = '';
+
+        show_loader()
+
+        $.ajax({
+          url: '/api/Scriping/', // Replace with your API endpoint
+          type: 'POST',
+          data: JSON.stringify({ url: url }),
+          contentType: 'application/json',
+          success: function(response) {
+            hide_loader()
+            displayData(response["person_profile_data"]);
+            displayData(response["company_profile_data"]);
+          },
+          error: function(error) {
+            hide_loader()
+            console.log(error);
+          }
+        });
+      }
+      
+
+    function displayData(data) {
+      var container = document.getElementById('grid-container');
+      
+      for (var key in data) {
+        if(Array.isArray(data[key])){
+            for(var i in data[key]){
+                var object=data[key][i]
+                grid_item=create_empty_grid_item(container,key+ " #"+(parseInt(i)+1))
+                if(typeof object === "object" && object !== null){
+                    for(var obj_key in object){
+                        create_gird_item(grid_item,obj_key,object[obj_key])
+                    }
+                }
+                else{
+
+                    if(key=="skills")obj_key=''
+                    create_gird_item(grid_item,obj_key,object)
+                }
+            }
+        }
+        else{
+            
+            create_gird_item(container,key,data[key])
+        }
+        
+      }
+    }
+    function create_gird_item(container,key,value){
+        var gridItem = document.createElement('div');
+        gridItem.className = 'grid-item';
+        var label = document.createElement('label');
+        label.innerText = key + ':';
+        var span = document.createElement('span');
+        span.innerText = value;
+        gridItem.appendChild(label);
+        gridItem.appendChild(span);
+        container.appendChild(gridItem);        
+    }
+    function create_empty_grid_item(container,item_number){
+        var gridItem = document.createElement('div');
+        gridItem.className = 'grid-item';
+        var parent_label = document.createElement('h4');
+        parent_label.innerText = item_number ;
+        parent_label.style={'text-align':'center'}
+        gridItem.appendChild(parent_label)
+        container.appendChild(gridItem); 
+        return gridItem
+    }
+    function show_loader(){
+        var scrapButton = document.querySelector('.button-container button');
+        scrapButton.disabled = true; // Disable the button
+        var loader = document.getElementById('loader');
+        loader.style.display = 'block'; // Display loader
+    }
+    function hide_loader(){
+
+        var scrapButton = document.querySelector('.button-container button');
+        scrapButton.disabled = false; // Disable the button
+        var loader = document.getElementById('loader');
+        loader.style.display = 'none'; // Display loader
+
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF Text Extraction</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    .button:hover {
+      background-color: #45a049;
+    }
+    
+    .output {
+      margin-top: 20px;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <input type="file" id="pdf-upload" accept="application/pdf">
+    <button class="button" id="extract-btn">Extract Text</button>
+  </div>
+  <div class="output" id="text-output"></div>
+
+  <script>
+    document.getElementById("extract-btn").addEventListener("click", function() {
+      const fileInput = document.getElementById("pdf-upload");
+      const file = fileInput.files[0];
+      
+      if (file) {
+        const formData = new FormData();
+        formData.append("pdf_file", file);
+        
+        fetch("/api/extract-text/", {
+          method: "POST",
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          const outputDiv = document.getElementById("text-output");
+          outputDiv.textContent = data.text;
+        })
+        .catch(error => console.log(error));
+      }
+    });
+  </script>
+</body>
+</html>

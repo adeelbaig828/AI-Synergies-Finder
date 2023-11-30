@@ -1,0 +1,54 @@
+{% extends 'Scrapping_API/auth_base.html' %}
+{% load static %}
+{% block scripts %}
+<script src="{% static 'js/signup.js'%}"></script>
+{% endblock scripts %}
+{% block body %}
+<div class="container-fluid d-flex justify-content-center align-items-center" style="height: 90%;">
+  <div class="card text-white bg-primary rounded-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-center mb-4">
+        <img width='600' src="{% static 'images/falcon_logo.svg' %}" alt="Logo" class="img-fluid" >
+      </div>
+      <h3 class="text-center mb-4">Create an Account</h3>
+      <form method="POST" id="falcon_ai_signup_form">
+        {% csrf_token %}
+        <div class="d-flex mb-3 justify-content-between" style="width: 100%;">
+          <div style="width: 47%;">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" required>
+          </div>
+          <div style="width: 47%;">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3">
+          <label for="confirm_password" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+        </div>
+        <div class="d-grid">
+          <button type="button" id="falcon_ai_signup_button" class="btn btn-secondary btn-lg">Sign Up</button>
+        </div>
+      </form>
+      {% if error %}
+      <div class="text-center mt-3">
+        <p style="color:#002b36;font-size:20px">{{ error }}</p>
+      </div>
+      {% endif %}
+      <div class="text-center mt-4">
+        <a href="/" class="text-decoration-none text-white">Already have an account? Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+  
